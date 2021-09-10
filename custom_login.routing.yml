@@ -1,0 +1,22 @@
+custom_login.login_form:
+  path: '/general-login'
+  defaults:
+    _form: '\Drupal\custom_login\Form\LoginForm'
+    _title: 'Log in'
+  requirements:
+    _access: 'TRUE'
+custom_login.otp_form:
+  path: '/general-login/otp'
+  defaults:
+    _form: '\Drupal\custom_login\Form\OTPForm'
+    _title: 'Log in'
+  requirements:
+    _access: 'TRUE'
+
+# custom_login.login_controller_login:
+#   path: '/general-login'
+#   defaults:
+#     _controller: '\Drupal\custom_login\Controller\LoginController::login'
+#     _title: 'Log in'
+#   requirements:
+#     _permission: 'access content'

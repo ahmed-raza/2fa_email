@@ -1,0 +1,6 @@
+services:
+  custom_login.login_redirect:
+    class: Drupal\custom_login\EventSubscriber\LoginRedirectSubscriber
+    arguments: []
+    tags:
+      - { name: event_subscriber }

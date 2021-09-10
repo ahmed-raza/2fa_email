@@ -1,0 +1,6 @@
+name: 'Custom Login'
+type: module
+description: 'Provides custom login functionality with email OTP.'
+core_version_requirement: ^8 || ^9
+package: 'Custom'
+version: 9.x-1.0
