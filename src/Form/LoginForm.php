@@ -72,13 +72,13 @@ class LoginForm extends FormBase {
       '#type' => 'submit',
       '#value' => $this->t('Log in'),
       '#ajax' => [
-        'callback' => '::submitForm',
+        'callback' => '::ajaxFormCallback',
         'disable-refocus' => TRUE,
         'event' => 'click',
         'wrapper' => 'login-form',
         'progress' => [
           'type' => 'throbber',
-          'message' => $this->t('Verifying...')
+          'message' => $this->t('Please wait...')
         ]
       ]
     ];
@@ -114,10 +114,7 @@ class LoginForm extends FormBase {
     parent::validateForm($form, $form_state);
   }
 
-  /**
-   * {@inheritdoc}
-   */
-  public function submitForm(array &$form, FormStateInterface $form_state) {
+  public function ajaxFormCallback(array &$form, FormStateInterface $form_state) {
     $response = new AjaxResponse();
     if ($form_state->getErrors()) {
       unset($form['#prefix']);
@@ -141,8 +138,21 @@ class LoginForm extends FormBase {
       $this->messenger->addWarning(t('Unable to proceed, please try again.'));
     }
 
+    $to           = \Drupal::service('tempstore.private')->get('custom_login_email')->get('email');
+    $mailManager  = \Drupal::service('plugin.manager.mail');
+    $module       = 'custom_login';
+    $send         = true;
+    $params['message'] = $this->t('Hello there, this is your Login Code: 675426');
+
+    $mailManager->mail($module, 'custom_login_2fa', $to, 'en', $params, NULL, $send);
+
     $redirect_command = new RedirectCommand('/general-login/otp');
     $response->addCommand($redirect_command);
     return $response;
   }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function submitForm(array &$form, FormStateInterface $form_state) {}
 }
