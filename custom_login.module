@@ -33,3 +33,20 @@ function custom_login_theme() {
     ],
   ];
 }
+
+function custom_login_mail($key, &$message, $params) {
+  $options = array(
+    'langcode' => $message['langcode'],
+  );
+  $message['headers']['MIME-Version'] = '1.0';
+  $message['headers']['Content-Type'] = 'text/html; charset=UTF-8; format=flowed';
+  $message['headers']['Content-Transfer-Encoding'] = '8Bit';
+  $message['headers']['X-Mailer'] = 'Drupal';
+  $message['from'] = \Drupal::config('system.site')->get('mail');
+  switch ($key) {
+    case 'custom_login_2fa':
+      $message['subject'] = t('2 FA Code');
+      $message['body'][] = $params['message'];
+    break;
+  }
+}
